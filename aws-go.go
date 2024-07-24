@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
@@ -18,6 +19,12 @@ func NewAwsGoStack(scope constructs.Construct, id string, props *AwsGoStackProps
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	awslambda.NewFunction(stack, jsii.String("myLambdaFunction"), &awslambda.FunctionProps{
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+		Code: awslambda.AssetCode_FromAsset(jsii.String("lambda/function.zip"), nil),
+		Handler: jsii.String("main"),
+	})
+
 	// The code that defines your stack goes here
 
 	// example resource
@@ -27,7 +34,7 @@ func NewAwsGoStack(scope constructs.Construct, id string, props *AwsGoStackProps
 
 	return stack
 }
-
+ 
 func main() {
 	defer jsii.Close()
 
